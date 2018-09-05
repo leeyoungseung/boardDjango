@@ -1,0 +1,46 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Django Board</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+</head>
+<body>
+	<div align="center">
+		<font size='5'> Board</font><br>
+		<table border="1" width="800" height='600'>
+			<tr heigtht='10%'>
+				<th><a href="/board/create">New Content</a></th>
+				<th><a href="#">main2</a></th>
+				<th><a href="#">main3</a></th>
+			</tr>
+			<tr>
+				<td colspan="5" align="center">
+					<table class="outline" width="99%">
+					<tr>
+						<th>No</th>
+						<th>Title</th>
+						<th>writer</th>
+						<th>time</th>
+						<th>count</th>
+					</tr>
+					{% for board in object_list %}
+					<tr>
+						<td>{{board.b_id}}</td>
+						<td><a href="{% url 'detail' b_id=board.b_id %}">{{board.b_subject}}</a></td>
+						<td>{{board.b_writer}}</td>
+						<td>{{board.b_reg_date | date:"Y-m-d D"  }}</td>
+						<td>{{board.b_read_count}}</td>
+					</tr>
+					{% endfor %}
+					</table>
+				</td>
+			</tr>
+			<tr >
+				<td colspan="5" align="center">
+					David's Django Board Project
+				</td>
+			</tr>
+		</table>
+</body>
+</html>

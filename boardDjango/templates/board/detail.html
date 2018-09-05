@@ -1,0 +1,42 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Django Board</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+</head>
+<body>
+	<div align="center">
+	<h1>View Detail</h1>
+	</div>
+	<div align="center">
+		<table border="1" width="99%">
+			<tr>
+				<th bgcolor="yellow" width='20%'>Number</th>
+				<td>{{board.b_id}}</td>
+				<th bgcolor="yellow" width='20%'>Counts</th>
+				<td>{{board.b_read_count}}</td>
+			</tr>
+			<tr>
+				<th bgcolor="yellow" width='20%'>Writer</th>
+				<td>{{board.b_writer}}</td>
+				<th bgcolor="yellow" width='20%'>Join Day</th>
+				<td>{{board.b_reg_date | date:"Y-m-d D"  }}</td>
+			</tr>
+			<tr>
+				<th bgcolor="yellow" width='20%'>Subject</th>
+				<td colspan="3">{{board.b_subject}}</td>
+			</tr>
+			<tr>
+				<th bgcolor="yellow" width='20%'>Contents</th>
+				<td colspan="3">{{board.b_content}}</td>
+			</tr>
+		</table>
+		<div align="right">
+			<a href="{% url 'update' b_id=board.b_id %}"><button>Update</button></a>
+			<a href="{% url 'delete' b_id=board.b_id %}"><button>Delete</button></a>
+			<a href="/board/"><button>Back to List</button></a>
+		</div>
+	</div>
+</body>
+</html>

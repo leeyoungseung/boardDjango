@@ -1,0 +1,17 @@
+{% load staticfiles %}
+<html>
+<head>
+	<title>Django Board</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+</head>
+<body>
+<div align="center">
+	<form method="post" action="/board/create">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit", value="save">Save</button>
+		<a href="/board/"><button>Back to List</button></a>
+	</form>
+</div>
+</body>
+</html>
