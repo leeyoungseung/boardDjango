@@ -3,9 +3,31 @@ from django.http import HttpResponse
 from .forms import BoardForm
 from django.views.generic import ListView
 from .models import Board
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 # from django.template.loader import get_template
 
 # Create your views here.
+class MainPageLV(ListView):
+	model = Board
+	template_name = 'board/mainPage.html'
+	paginate_by = 3
+
+	def get_context_data(self, **kwargs):
+		context = super(MainPageLV, self).get_context_data(**kwargs)
+		list_all = Board.objects.all()
+		paginator = Paginator(list_all, self.paginate_by)
+
+		page = self.request.GET.get('page')
+		try :
+			list_paged = paginator.page(page)
+		except PageNotAnInteger :
+			list_paged = paginator.page(1)
+		except EmptyPage :
+			list_paged = paginator.page(paginator.num_pages)
+		# 
+		context['board_list'] = list_paged
+		return context
+
 def delete(request, b_id):
 	board = get_object_or_404(Board, pk=b_id)
 	if request.method =='POST':
@@ -33,21 +55,12 @@ def detail(request, b_id):
 		return render(request, 'board/detail.html',{'board':board})
 
 
-class MainPageLV(ListView):
-	model = Board
-	template_name = 'board/mainPage.html'
-
-	def get_queryset(self):
-		qs = Board.objects.all()
-		return qs
-
-
 def create_new(request):
 	if request.method == 'POST':
 		form = BoardForm(request.POST)
 		if form.is_valid():
 			form.save()
-			return HttpResponse('success create')
+			return redirect('/board/')
 	else :
 		form = BoardForm()
 	return render(request,'board/create_new.html',{'form':form})

@@ -24,7 +24,7 @@
 						<th>time</th>
 						<th>count</th>
 					</tr>
-					{% for board in object_list %}
+					{% for board in board_list %}
 					<tr>
 						<td>{{board.b_id}}</td>
 						<td><a href="{% url 'detail' b_id=board.b_id %}">{{board.b_subject}}</a></td>
@@ -36,6 +36,33 @@
 					</table>
 				</td>
 			</tr>
+			{% if is_paginated %}
+			<tr>
+				<td colspan="5" align="center">
+					<ul class="pagination">
+					{% if page_obj.has_previous %}
+						<li>
+							<span><a href="?page={{ page_obj.previous_page_number }}">Previous</a></span>
+						</li>
+					{% endif %}
+						<li>
+							<span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+						</li>
+					{% if page_obj.has_next %}
+						<li>
+							<span><a href="?page={{ page_obj.next_page_number }}">Next</a></span>
+						</li>
+					{% endif %}
+					</ul>
+				</td>
+			</tr>
+			{% else %}
+			<tr>
+				<td colspan="5" align="center">
+					Not yet created
+				</td>
+			</tr>
+			{% endif %}
 			<tr >
 				<td colspan="5" align="center">
 					David's Django Board Project
