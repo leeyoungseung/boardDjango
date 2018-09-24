@@ -25,7 +25,7 @@ SECRET_KEY = '!a2zj!#o9p)t8)%@y%_d(symct4*1()urq(%(*et%ejpq&r94k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','.ap-northeast-2.compute.amazonaws.com','.ap-northeast-1.compute.amazonaws.com']
+ALLOWED_HOSTS = ['localhost','.ap-northeast-2.compute.amazonaws.com','.ap-northeast-1.compute.amazonaws.com', '.davidsword.site']
 
 
 # Application definition
@@ -74,13 +74,23 @@ WSGI_APPLICATION = 'boardDjango.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'mydatabase.cf46yixbqgqa.ap-northeast-1.rds.amazonaws.com',
+        'PORT': '3306',
+        'NAME': 'daviddb',
+        'USER': 'dudtmd22',
+        'PASSWORD': '1qaz2wsx3edc',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
