@@ -1,30 +1,39 @@
+{% extends 'board/layout.html' %}
 {% load staticfiles %}
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Django Board</title>
-	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
-</head>
-<body>
-	<div align="center">
-		<font size='5'> Board</font><br>
-		<table border="1" width="800" height='600'>
-			<tr heigtht='10%'>
-				<th><a href="/board/create">New Content</a></th>
-				<th><a href="#">main2</a></th>
-				<th><a href="#">main3</a></th>
-			</tr>
-			<tr>
-				<td colspan="5" align="center">
-					<table class="outline" width="99%">
-					<tr>
-						<th>No</th>
-						<th>Title</th>
-						<th>writer</th>
-						<th>time</th>
-						<th>count</th>
-					</tr>
-					{% for board in object_list %}
+      {% block content %}
+      <div id="content-wrapper">
+        <div class="container-fluid">
+          <!-- DataTables Example -->
+          <div class="card mb-3">
+            <div class="card-header">
+              <i class="fas fa-table"></i>
+              Data Table Example</div>
+            <div class="card-body">
+                <div class="card-body" align="right">
+                    <a href="/board/create"><button type="button" class="btn btn-primary">New Content</button></a>
+                </div>
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Title</th>
+                      <th>writer</th>
+                      <th>time</th>
+                      <th>count</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>No</th>
+                      <th>Title</th>
+                      <th>writer</th>
+                      <th>time</th>
+                      <th>count</th>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+				  {% for board in object_list %}
 					<tr>
 						<td>{{board.b_id}}</td>
 						<td><a href="{% url 'detail' b_id=board.b_id %}">{{board.b_subject}}</a></td>
@@ -33,14 +42,41 @@
 						<td>{{board.b_read_count}}</td>
 					</tr>
 					{% endfor %}
-					</table>
-				</td>
-			</tr>
-			<tr >
-				<td colspan="5" align="center">
-					David's Django Board Project
-				</td>
-			</tr>
-		</table>
-</body>
-</html>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+              <!-- Paging Process -->
+              {% if is_paginated %}
+              <div class="col-sm-12 col-md-5">
+                  <div class="dataTables_info">
+                      Showing {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}. entries
+                  </div>
+              </div>
+              <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                  <ul class="pagination">
+                      {% if page_obj.has_previous %}
+                      <li class="paginate_button page-item previous disabled" id="dataTable_previous">
+                         <span><a href="?page={{ page_obj.previous_page_number }}">Previous</a></span>
+                      </li>
+                      {% endif %}
+                      {% if page_obj.has_next %}
+                      <li class="paginate_button page-item next" id="dataTable_next">
+                          <span><a href="?page={{ page_obj.next_page_number }}">Next</a></span>
+                      </li>
+                      {% endif %}
+                  </ul>
+              </div>
+              {% else %}
+              <div class="col-sm-12 col-md-5">
+                  <div class="dataTables_info">
+                      Don't have pages
+                  </div>
+              </div>
+              {% endif %}
+
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+          </div>
+		</div>
+	  </div>
+      {% endblock content %}

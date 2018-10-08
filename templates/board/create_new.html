@@ -1,17 +1,17 @@
+{% extends 'board/layout.html' %}
 {% load staticfiles %}
-<html>
-<head>
-	<title>Django Board</title>
-	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
-</head>
-<body>
-<div align="center">
-	<form method="post" action="/board/create">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<button type="submit", value="save">Save</button>
-		<a href="/board/"><button>Back to List</button></a>
-	</form>
+{% block content %}
+<div id="content-wrapper">
+	<div class="container-fluid">
+		<div>
+		    <h1>Django Board Create</h1>
+	    </div>
+	    <form method="post" action="/board/create">
+		    {% csrf_token %}
+		    {{ form.as_p }}
+		    <div><button type="submit", class="btn btn-success", value="save">Save</button>
+	    </form>
+		<a href="/board/"><button type="button" class="btn btn-primary">Back to List</button></a></div>
+	</div>
 </div>
-</body>
-</html>
+{% endblock content %}

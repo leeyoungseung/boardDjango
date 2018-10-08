@@ -1,22 +1,23 @@
+{% extends 'board/layout.html' %}
 {% load staticfiles %}
-<html>
-<head>
-	<title>Django Board Delete Page</title>
-	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
-</head>
-<body>
-	<div align="center">
-		<h1>Do you want to delete your content?</h1>
+{% block content %}
+<div id="content-wrapper">
+	<div class="container-fluid">
+	    <div align="center">
+		    <h1>Django Board Delete Page</h1>
+	    </div>
+	    <div align="center">
+		    <h1>Do you want to delete your content?</h1>
+	    </div>
+        <div align="center">
+	    <form method="post" action="/board/delete/{{board.b_id}}">
+		    {% csrf_token %}
+			<div>Please input your Password : <input type="text" name="b_passwd"></div><br>
+		    <button class="btn btn-danger", type="submit", value="delete">Delete</button>
+	    </form>
+	    <a href="{% url 'detail' b_id=board.b_id %}"><button class="btn btn-primary">Back to Content</button></a>
+	    <a href="/board/"><button class="btn btn-info">Back to List</button></a>
+        </div>
 	</div>
-<div align="center">
-	<form method="post" action="/board/delete/{{board.b_id}}">
-		{% csrf_token %}
-		Please input your Password : <input type="text" name="b_passwd"><br>
-		<button type="submit", value="delete">Delete</button>
-	</form>
-	<a href="{% url 'detail' b_id=board.b_id %}"><button>Back to Content</button>
-		</a>
-	<a href="/board/"><button>Back to List</button></a>
 </div>
-</body>
-</html>
+{% endblock content %}
