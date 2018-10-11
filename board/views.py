@@ -1,10 +1,33 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from .forms import BoardForm
-from django.views.generic import ListView
+from .forms import BoardForm, UserCreateForm
+from django.views.generic import ListView, TemplateView
 from .models import Board
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+
 # from django.template.loader import get_template
+
+
+def create_user(request):
+	if request.method == 'POST':
+		user = authenticate(email=request.POST['email'], password=request.POST['password1'])
+		if user == 0:
+			return render(request, 'registration/signup_done.html', {'message': '회원이 이미 있음'})
+		else:
+			email = request.POST['email']
+			password = request.POST['password1']
+			username = request.POST['username']
+			# first_name = request.POST['first_name']
+			# last_name = request.POST['last_name']
+			new_user = User.objects.create_user(username, password, email)
+			new_user.save()
+		return render(request, 'registration/signup_done.html', {'message': '회원가입이 완료됨'})
+	else:
+		form = UserCreateForm()
+	return render(request, 'registration/signup.html', {'form': form})
+
 
 # Create your views here.
 class MainPageLV(ListView):
@@ -28,15 +51,17 @@ class MainPageLV(ListView):
 		context['board_list'] = list_paged
 		return context
 
+
 # Create your views here.
 def delete(request, b_id):
 	board = get_object_or_404(Board, pk=b_id)
-	if request.method =='POST':
+	if request.method == 'POST':
 		inputedPW = request.POST['b_passwd']
 		if inputedPW == board.b_passwd:
 			board.delete()
 			return redirect('/board/')
-	return render(request, 'board/delete.html',{'board':board})
+	return render(request, 'board/delete.html',{'board': board})
+
 
 def update(request, b_id):
 	board = get_object_or_404(Board, pk=b_id)
@@ -44,16 +69,18 @@ def update(request, b_id):
 		form = BoardForm(request.POST, instance=board)
 		if form.is_valid():
 			board = form.save()
-			return render(request, 'board/detail.html',{'board':board})
+			return render(request, 'board/detail.html', {'board': board})
 	else :
 		form = BoardForm(instance=board)
 		pk = board.b_id
-		return render(request, 'board/update.html',{'form':form,'b_id':pk})
+		return render(request, 'board/update.html', {'form': form, 'b_id': pk})
+
 
 def detail(request, b_id):
 	board = get_object_or_404(Board, pk=b_id)
 	if request.method == 'GET':
-		return render(request, 'board/detail.html',{'board':board})
+		return render(request, 'board/detail.html', {'board': board})
+
 
 def create_new(request):
 	if request.method == 'POST':
@@ -61,7 +88,7 @@ def create_new(request):
 		if form.is_valid():
 			form.save()
 			return redirect('/board/')
-	else :
+	else:
 		form = BoardForm()
 	return render(request,'board/create_new.html',{'form':form})
 

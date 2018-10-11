@@ -1,0 +1,15 @@
+{% extends 'board/layout.html' %}
+{% load staticfiles %}
+{% block content %}
+<div id="content-wrapper">
+	<div class="container-fluid">
+		<div>
+		    <h1>{{message}}</h1>
+	    </div>
+        <div>
+		<a href="#"><button type="button" class="btn btn-primary">Go to Login</button></a>
+        <a href="/board/"><button type="button" class="btn btn-primary">Back to List</button></a>
+        </div>
+	</div>
+</div>
+{% endblock content %}
