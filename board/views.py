@@ -6,24 +6,36 @@ from .models import Board
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
 
 # from django.template.loader import get_template
 
 
+def sign_out(request):
+	logout(request)
+
+
+def sign_in(request):
+	if request.method == 'POST':
+		user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+		if user is not None:
+			login(request, user)
+	else:
+		form = AuthenticationForm()
+	return render(request, 'registration/login.html', {'form': form})
+
+
 def create_user(request):
 	if request.method == 'POST':
-		user = authenticate(email=request.POST['email'], password=request.POST['password1'])
-		if user == 0:
-			return render(request, 'registration/signup_done.html', {'message': '회원이 이미 있음'})
-		else:
+		try:
+			username = request.POST['username']
 			email = request.POST['email']
 			password = request.POST['password1']
-			username = request.POST['username']
-			# first_name = request.POST['first_name']
-			# last_name = request.POST['last_name']
-			new_user = User.objects.create_user(username, password, email)
+			new_user = User.objects.create_user(username, email, password)
 			new_user.save()
-		return render(request, 'registration/signup_done.html', {'message': '회원가입이 완료됨'})
+			return render(request, 'registration/signup_done.html', {'message': '회원가입이 완료됨'})
+		except:
+			return render(request, 'registration/signup_done.html', {'message': '회원이 이미 있음'})
 	else:
 		form = UserCreateForm()
 	return render(request, 'registration/signup.html', {'form': form})
